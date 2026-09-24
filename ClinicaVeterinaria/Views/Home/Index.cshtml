@@ -1,8 +1,225 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+ 
+<div class="welcome-section">
+ 
+    <div class="welcome-content">
+ 
+        <div class="welcome-badge">
+            🐾 Clínica Veterinaria
+        </div>
+ 
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            @if (User.IsInRole("Administrador"))
+            {
+                <h1>
+                    Bienvenido a <span>VetCare</span>
+                </h1>
+ 
+                <p>
+                    Administra los servicios veterinarios, las citas,
+                    mascotas y reportes de la clínica desde un solo lugar.
+                </p>
+ 
+                <div class="welcome-buttons">
+ 
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="btn btn-vet-primary">
+                        Ir al Dashboard
+                    </a>
+ 
+                    <a asp-controller="ServiciosVeterinarios"
+                       asp-action="Index"
+                       class="btn btn-vet-outline">
+                        Gestionar Servicios
+                    </a>
+ 
+                </div>
+            }
+            else if (User.IsInRole("Cliente"))
+            {
+                <h1>
+                    Bienvenido a <span>VetCare</span>
+                </h1>
+ 
+                <p>
+                    Registra tus mascotas, consulta nuestros servicios
+                    veterinarios y agenda tus citas fácilmente.
+                </p>
+ 
+                <div class="welcome-buttons">
+ 
+                    <a asp-controller="Mascotas"
+                       asp-action="Index"
+                       class="btn btn-vet-primary">
+                        Mis Mascotas
+                    </a>
+ 
+                    <a asp-controller="Citas"
+                       asp-action="Create"
+                       class="btn btn-vet-outline">
+                        Solicitar Cita
+                    </a>
+ 
+                </div>
+            }
+            else
+            {
+                <h1>
+                    Bienvenido a <span>VetCare</span>
+                </h1>
+ 
+                <p>
+                    Sistema web para la gestión de una clínica veterinaria.
+                </p>
+            }
+        }
+        else
+        {
+            <h1>
+                El cuidado que tu mascota
+                <span>merece</span>
+            </h1>
+ 
+            <p>
+                Registra tus mascotas, consulta nuestros servicios
+                veterinarios y agenda citas desde un solo lugar.
+            </p>
+ 
+            <div class="welcome-buttons">
+ 
+                <a asp-area="Identity"
+                   asp-page="/Account/Register"
+                   class="btn btn-vet-primary">
+                    Crear cuenta
+                </a>
+ 
+                <a asp-area="Identity"
+                   asp-page="/Account/Login"
+                   class="btn btn-vet-outline">
+                    Iniciar sesión
+                </a>
+ 
+            </div>
+        }
+ 
+    </div>
+ 
+ 
+    <div class="welcome-visual">
+ 
+        <div class="pet-circle">
+            🐶
+        </div>
+ 
+        <div class="floating-card card-one">
+ 
+            <span>🐾</span>
+ 
+            <div>
+                <strong>Mascotas</strong>
+                <small>Cuidado personalizado</small>
+            </div>
+ 
+        </div>
+ 
+        <div class="floating-card card-two">
+ 
+            <span>🩺</span>
+ 
+            <div>
+                <strong>Servicios</strong>
+                <small>Atención profesional</small>
+            </div>
+ 
+        </div>
+ 
+        <div class="floating-card card-three">
+ 
+            <span>📅</span>
+ 
+            <div>
+                <strong>Citas</strong>
+                <small>Agenda organizada</small>
+            </div>
+ 
+        </div>
+ 
+    </div>
+ 
 </div>
+ 
+ 
+<div class="welcome-features">
+ 
+    <div class="feature-box">
+ 
+        <div class="feature-icon">
+            🩺
+        </div>
+ 
+        <h5>Atención Veterinaria</h5>
+ 
+        <p>
+            Servicios pensados para cuidar la salud
+            y bienestar de cada mascota.
+        </p>
+ 
+    </div>
+ 
+ 
+    <div class="feature-box">
+ 
+        <div class="feature-icon">
+            📅
+        </div>
+ 
+        <h5>Gestión de Citas</h5>
+ 
+        <p>
+            Organiza y consulta fácilmente las citas
+            veterinarias registradas.
+        </p>
+ 
+    </div>
+ 
+ 
+    <div class="feature-box">
+ 
+        <div class="feature-icon">
+            🐾
+        </div>
+ 
+        <h5>Control de Mascotas</h5>
+ 
+        <p>
+            Mantén organizada la información de las
+            mascotas de nuestros clientes.
+        </p>
+ 
+    </div>
+ 
+ 
+    <div class="feature-box">
+ 
+        <div class="feature-icon">
+            📊
+        </div>
+ 
+        <h5>Administración</h5>
+ 
+        <p>
+            Información centralizada para facilitar
+            la gestión de la clínica.
+        </p>
+ 
+    </div>
+ 
+</div>
+tiene menú contextual
+
+
+tienes menú contextual

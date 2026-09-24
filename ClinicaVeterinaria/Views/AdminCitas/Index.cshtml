@@ -1,0 +1,262 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.Cita>
+ 
+@{
+    ViewData["Title"] = "Gestión de Citas";
+}
+ 
+<div class="admin-header mb-4">
+ 
+    <div>
+        <h1>Gestión de Citas</h1>
+ 
+        <p>
+            Consulta y administra todas las citas registradas
+        </p>
+    </div>
+ 
+</div>
+ 
+ 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Mensaje"]
+    </div>
+}
+ 
+ 
+<div class="admin-panel">
+ 
+    <div class="panel-header">
+ 
+        <h4>
+            Citas registradas
+        </h4>
+ 
+    </div>
+ 
+ 
+    <div class="p-3">
+ 
+        <form method="get"
+              class="row g-3 mb-3">
+ 
+            <div class="col-md-5">
+ 
+                <input name="buscar"
+                       class="form-control"
+                       placeholder="Buscar por mascota o servicio" />
+ 
+            </div>
+ 
+ 
+            <div class="col-md-4">
+ 
+                <select name="estado"
+                        class="form-select">
+ 
+                    <option value="">
+                        Todos los estados
+                    </option>
+ 
+                    <option value="Pendiente">
+                        Pendiente
+                    </option>
+ 
+                    <option value="Atendida">
+                        Atendida
+                    </option>
+ 
+                    <option value="Cancelada">
+                        Cancelada
+                    </option>
+ 
+                </select>
+ 
+            </div>
+ 
+ 
+            <div class="col-md-3">
+ 
+                <button class="btn btn-primary w-100">
+                    Buscar
+                </button>
+ 
+            </div>
+ 
+        </form>
+ 
+    </div>
+ 
+ 
+    <div class="table-responsive">
+ 
+        <table class="table table-hover align-middle mb-0">
+ 
+            <thead>
+ 
+                <tr>
+                    <th>Mascota</th>
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+ 
+            </thead>
+ 
+ 
+            <tbody>
+ 
+                @foreach (var cita in Model)
+                {
+                    <tr>
+ 
+                        <td>
+                            <strong>
+                                @cita.Mascota?.Nombre
+                            </strong>
+                        </td>
+ 
+ 
+                        <td>
+                            @cita.Mascota?.Usuario?.NombreCompleto
+                        </td>
+ 
+ 
+                        <td>
+                            @cita.ServicioVeterinario?.Nombre
+                        </td>
+ 
+ 
+                        <td>
+                            @cita.Fecha.ToString("dd/MM/yyyy")
+                        </td>
+ 
+ 
+                        <td>
+ 
+                            @if (cita.Estado == "Pendiente")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Pendiente
+                                </span>
+                            }
+                            else if (cita.Estado == "Atendida")
+                            {
+                                <span class="badge bg-success">
+                                    Atendida
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Cancelada
+                                </span>
+                            }
+ 
+                        </td>
+ 
+ 
+                        <td>
+ 
+                            <a asp-action="Details"
+                               asp-route-id="@cita.Id"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver
+                            </a>
+ 
+ 
+                            <div class="dropdown d-inline">
+ 
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                        data-bs-toggle="dropdown">
+                                    Estado
+                                </button>
+ 
+ 
+                                <ul class="dropdown-menu">
+ 
+                                    <li>
+ 
+                                        <form asp-action="CambiarEstado"
+                                              method="post">
+ 
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@cita.Id" />
+ 
+                                            <input type="hidden"
+                                                   name="estado"
+                                                   value="Pendiente" />
+ 
+                                            <button class="dropdown-item">
+                                                Pendiente
+                                            </button>
+ 
+                                        </form>
+ 
+                                    </li>
+ 
+ 
+                                    <li>
+ 
+                                        <form asp-action="CambiarEstado"
+                                              method="post">
+ 
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@cita.Id" />
+ 
+                                            <input type="hidden"
+                                                   name="estado"
+                                                   value="Atendida" />
+ 
+                                            <button class="dropdown-item">
+                                                Atendida
+                                            </button>
+ 
+                                        </form>
+ 
+                                    </li>
+ 
+ 
+                                    <li>
+ 
+                                        <form asp-action="CambiarEstado"
+                                              method="post">
+ 
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@cita.Id" />
+ 
+                                            <input type="hidden"
+                                                   name="estado"
+                                                   value="Cancelada" />
+ 
+                                            <button class="dropdown-item">
+                                                Cancelada
+                                            </button>
+ 
+                                        </form>
+ 
+                                    </li>
+ 
+                                </ul>
+ 
+                            </div>
+ 
+                        </td>
+ 
+                    </tr>
+                }
+ 
+            </tbody>
+ 
+        </table>
+ 
+    </div>
+ 
+</div>
+ 

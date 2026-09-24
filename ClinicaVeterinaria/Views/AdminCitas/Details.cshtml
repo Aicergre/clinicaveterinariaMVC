@@ -1,0 +1,110 @@
+﻿@model ClinicaVeterinaria.Models.Cita
+ 
+@{
+    ViewData["Title"] = "Detalle de Cita";
+}
+ 
+<div class="admin-header mb-4">
+ 
+    <div>
+        <h1>Detalle de Cita</h1>
+ 
+        <p>
+            Información de la cita seleccionada
+        </p>
+    </div>
+ 
+</div>
+ 
+ 
+<div class="admin-panel">
+ 
+    <div class="panel-header">
+ 
+        <h4>
+            Cita #@Model.Id
+        </h4>
+ 
+    </div>
+ 
+ 
+    <div class="p-4">
+ 
+        <div class="row g-4">
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Mascota
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.Mascota?.Nombre
+                </p>
+ 
+            </div>
+ 
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Cliente
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.Mascota?.Usuario?.NombreCompleto
+                </p>
+ 
+            </div>
+ 
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Servicio
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.ServicioVeterinario?.Nombre
+                </p>
+ 
+            </div>
+ 
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Fecha
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.Fecha.ToString("dd/MM/yyyy")
+                </p>
+ 
+            </div>
+ 
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Estado
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.Estado
+                </p>
+ 
+            </div>
+ 
+        </div>
+ 
+ 
+        <a asp-action="Index"
+           class="btn btn-secondary mt-3">
+            Volver
+        </a>
+ 
+    </div>
+ 
+</div>
+ 
