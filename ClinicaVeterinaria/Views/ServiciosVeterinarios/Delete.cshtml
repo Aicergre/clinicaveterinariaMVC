@@ -1,0 +1,101 @@
+﻿@model ClinicaVeterinaria.Models.ServicioVeterinario
+ 
+@{
+    ViewData["Title"] = "Eliminar Servicio";
+}
+ 
+<div class="admin-header mb-4">
+ 
+    <div>
+        <h1>Eliminar Servicio</h1>
+ 
+        <p>
+            Confirma la eliminación del servicio seleccionado.
+        </p>
+    </div>
+ 
+</div>
+ 
+<div class="admin-panel">
+ 
+    <div class="panel-header">
+ 
+        <h4>
+            🩺 @Model.Nombre
+        </h4>
+ 
+    </div>
+ 
+    <div class="p-4">
+ 
+        <div class="alert alert-warning">
+ 
+            <strong>Atención:</strong>
+ 
+            esta acción eliminará el servicio veterinario.
+ 
+        </div>
+ 
+        <div class="row g-4">
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Servicio
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.Nombre
+                </p>
+ 
+            </div>
+ 
+            <div class="col-md-6">
+ 
+                <label class="detail-label">
+                    Precio
+                </label>
+ 
+                <p class="detail-value">
+                    Bs. @Model.Precio.ToString("0.00")
+                </p>
+ 
+            </div>
+ 
+            <div class="col-12">
+ 
+                <label class="detail-label">
+                    Descripción
+                </label>
+ 
+                <p class="detail-value">
+                    @Model.Descripcion
+                </p>
+ 
+            </div>
+ 
+        </div>
+ 
+        <form asp-action="Delete"
+              method="post"
+              class="mt-4">
+ 
+            <input type="hidden"
+                   asp-for="Id" />
+ 
+            <button type="submit"
+                    class="btn btn-danger">
+                Sí, eliminar
+            </button>
+ 
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Cancelar
+            </a>
+ 
+        </form>
+ 
+    </div>
+ 
+</div>
+ 

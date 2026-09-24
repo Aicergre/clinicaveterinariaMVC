@@ -2,8 +2,13 @@ using ClinicaVeterinaria.Data;
 using ClinicaVeterinaria.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;
+
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
