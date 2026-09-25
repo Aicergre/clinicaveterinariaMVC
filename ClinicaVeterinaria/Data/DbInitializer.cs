@@ -1,18 +1,22 @@
 ﻿using ClinicaVeterinaria.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClinicaVeterinaria.Data
 {
     public static class DbInitializer
     {
-        public static async Task InicializarAsync(
-            IServiceProvider services)
+        public static async Task InicializarAsync(IServiceProvider services)
         {
             var roleManager =
                 services.GetRequiredService<RoleManager<IdentityRole>>();
 
             var userManager =
                 services.GetRequiredService<UserManager<ApplicationUser>>();
+
+            // ==========================================
+            // CREAR ROLES
+            // ==========================================
 
             string[] roles =
             {
@@ -25,11 +29,18 @@ namespace ClinicaVeterinaria.Data
                 if (!await roleManager.RoleExistsAsync(rol))
                 {
                     await roleManager.CreateAsync(
-                        new IdentityRole(rol));
+                        new IdentityRole(rol)
+                    );
                 }
             }
 
+
+            // ==========================================
+            // CREAR ADMINISTRADOR
+            // ==========================================
+
             string correoAdmin = "admin@veterinaria.com";
+            string passwordAdmin = "Admin123!";
 
             var admin =
                 await userManager.FindByEmailAsync(correoAdmin);
@@ -40,21 +51,22 @@ namespace ClinicaVeterinaria.Data
                 {
                     UserName = correoAdmin,
                     Email = correoAdmin,
-                    NombreCompleto =
-                        "Administrador Veterinaria",
+                    NombreCompleto = "Administrador Veterinaria",
                     EmailConfirmed = true
                 };
 
-                var resultado =
+                var resultadoAdmin =
                     await userManager.CreateAsync(
                         admin,
-                        "Admin123!");
+                        passwordAdmin
+                    );
 
-                if (resultado.Succeeded)
+                if (resultadoAdmin.Succeeded)
                 {
                     await userManager.AddToRoleAsync(
                         admin,
-                        "Administrador");
+                        "Administrador"
+                    );
                 }
             }
             else
@@ -65,7 +77,84 @@ namespace ClinicaVeterinaria.Data
                 {
                     await userManager.AddToRoleAsync(
                         admin,
-                        "Administrador");
+                        "Administrador"
+                    );
+                }
+            }
+
+
+            // ==========================================
+            // CREAR CLIENTE DE PRUEBA
+            // ==========================================
+
+            string correoCliente =
+                "cliente@veterinaria.com";
+
+            string passwordCliente =
+                "Cliente123!";
+
+            var cliente =
+                await userManager.FindByEmailAsync(
+                    correoCliente
+                );
+
+            if (cliente == null)
+            {
+                cliente = new ApplicationUser
+                {
+                    UserName = correoCliente,
+                    Email = correoCliente,
+                    NombreCompleto = "Cliente Prueba",
+                    EmailConfirmed = true
+                };
+
+                var resultadoCliente =
+                    await userManager.CreateAsync(
+                        cliente,
+                        passwordCliente
+                    );
+
+                if (resultadoCliente.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(
+                        cliente,
+                        "Cliente"
+                    );
+                }
+            }
+            else
+            {
+                if (!await userManager.IsInRoleAsync(
+                    cliente,
+                    "Cliente"))
+                {
+                    await userManager.AddToRoleAsync(
+                        cliente,
+                        "Cliente"
+                    );
+                }
+            }
+
+
+            // ==========================================
+            // ASIGNAR CLIENTE A USUARIOS SIN ROL
+            // ==========================================
+            // Esto arreglará automáticamente prueba1@gmail.com
+
+            var usuarios =
+                await userManager.Users.ToListAsync();
+
+            foreach (var usuario in usuarios)
+            {
+                var rolesUsuario =
+                    await userManager.GetRolesAsync(usuario);
+
+                if (rolesUsuario.Count == 0)
+                {
+                    await userManager.AddToRoleAsync(
+                        usuario,
+                        "Cliente"
+                    );
                 }
             }
         }

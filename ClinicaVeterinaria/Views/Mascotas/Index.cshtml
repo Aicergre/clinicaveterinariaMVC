@@ -1,0 +1,128 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.Mascota>
+
+@{
+    ViewData["Title"] = "Mis Mascotas";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                🐾 Mis Mascotas
+            </h2>
+
+            <p class="text-muted mb-0">
+                Administra las mascotas registradas en tu cuenta.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+            + Registrar Mascota
+        </a>
+
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Mensaje"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div style="font-size:70px;">
+                    🐶
+                </div>
+
+                <h4 class="fw-bold mt-3">
+                    Aún no tienes mascotas
+                </h4>
+
+                <p class="text-muted">
+                    Registra tu primera mascota para poder solicitar
+                    citas veterinarias.
+                </p>
+
+                <a asp-action="Create"
+                   class="btn btn-primary mt-2">
+                    Registrar mi mascota
+                </a>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var mascota in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center"
+                                 style="font-size:55px;">
+                                🐾
+                            </div>
+
+                            <h4 class="text-center fw-bold mt-2">
+                                @mascota.Nombre
+                            </h4>
+
+                            <hr />
+
+                            <p>
+                                <strong>Especie:</strong>
+                                @mascota.Especie
+                            </p>
+
+                            <p>
+                                <strong>Raza:</strong>
+                                @mascota.Raza
+                            </p>
+
+                            <div class="d-flex gap-2 mt-3">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@mascota.Id"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Ver
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@mascota.Id"
+                                   class="btn btn-outline-warning btn-sm">
+                                    Editar
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@mascota.Id"
+                                   class="btn btn-outline-danger btn-sm">
+                                    Eliminar
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

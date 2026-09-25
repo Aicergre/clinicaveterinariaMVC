@@ -4,48 +4,68 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+// ==========================================
+// QUEST PDF
+// ==========================================
 
 QuestPDF.Settings.License = LicenseType.Community;
 
 
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException(
-        "No se encontró DefaultConnection.");
+// ==========================================
+// BASE DE DATOS
+// ==========================================
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+var connectionString =
+    builder.Configuration.GetConnectionString(
+        "DefaultConnection"
+    )
+    ?? throw new InvalidOperationException(
+        "No se encontró DefaultConnection."
+    );
+
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options =>
+        options.UseSqlServer(connectionString)
+);
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+// ==========================================
+// IDENTITY
+// ==========================================
 
 builder.Services
     .AddDefaultIdentity<ApplicationUser>(options =>
     {
+        // Para el proyecto no exigimos confirmación por correo
         options.SignIn.RequireConfirmedAccount = false;
 
-        options.Password.RequiredLength = 6;
+        // Contraseña
         options.Password.RequireDigit = true;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequiredLength = 6;
     })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+// ==========================================
+// MVC
+// ==========================================
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// TODAVIA NO ACTIVAR.
-// Primero debemos ejecutar las migraciones.
 
-using (var scope = app.Services.CreateScope())
-{
-    await DbInitializer.InicializarAsync(
-        scope.ServiceProvider);
-}
+// ==========================================
+// CONFIGURACIÓN HTTP
+// ==========================================
 
 if (app.Environment.IsDevelopment())
 {
@@ -71,6 +91,24 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.MapRazorPages();
+app.MapRazorPages()
+    .WithStaticAssets();
+
+
+// ==========================================
+// CREAR ROLES Y USUARIOS INICIALES
+// ==========================================
+
+using (var scope = app.Services.CreateScope())
+{
+    await DbInitializer.InicializarAsync(
+        scope.ServiceProvider
+    );
+}
+
+
+// ==========================================
+// EJECUTAR
+// ==========================================
 
 app.Run();

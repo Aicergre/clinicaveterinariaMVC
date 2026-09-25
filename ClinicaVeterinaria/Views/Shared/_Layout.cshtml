@@ -1,264 +1,561 @@
-﻿<!DOCTYPE html>
- 
+﻿@using Microsoft.AspNetCore.Identity
+@using ClinicaVeterinaria.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+
 <html lang="es">
- 
+
 <head>
- 
+
     <meta charset="utf-8" />
- 
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
- 
+
     <title>
         @ViewData["Title"] - VetCare
     </title>
- 
+
+
+    <!-- BOOTSTRAP -->
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
- 
+
+
+    <!-- CSS DEL PROYECTO -->
     <link rel="stylesheet"
           href="~/css/site.css"
           asp-append-version="true" />
- 
+
+
+    <style>
+
+            body {
+                background: #f5f8fb;
+                min-height: 100vh;
+            }
+
+            .vet-navbar {
+                background: linear-gradient( 90deg, #193c55, #25657a );
+                min-height: 70px;
+                box-shadow: 0 2px 10px rgba(0,0,0,.08);
+            }
+
+            .vet-brand {
+                font-size: 1.35rem;
+                font-weight: 700;
+                color: white !important;
+                text-decoration: none;
+            }
+
+            .vet-logo {
+                width: 42px;
+                height: 42px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                background: rgba(255,255,255,.12);
+                margin-right: 8px;
+            }
+
+            .vet-navbar .nav-link {
+                color: rgba(255,255,255,.88) !important;
+                font-weight: 500;
+                margin: 0 4px;
+                border-radius: 8px;
+                padding: 9px 13px !important;
+                transition: .2s;
+            }
+
+                .vet-navbar .nav-link:hover {
+                    color: white !important;
+                    background: rgba(255,255,255,.12);
+                }
+
+            .vet-navbar .dropdown-menu {
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,.12);
+                padding: 8px;
+            }
+
+            .vet-navbar .dropdown-item {
+                border-radius: 8px;
+                padding: 9px 13px;
+            }
+
+                .vet-navbar .dropdown-item:hover {
+                    background: #eef7fa;
+                }
+
+            .main-content {
+                min-height: calc(100vh - 135px);
+                padding-top: 25px;
+                padding-bottom: 35px;
+            }
+
+            footer {
+                background: white;
+                border-top: 1px solid #e5e7eb;
+                color: #6b7280;
+                padding: 18px 0;
+                font-size: .9rem;
+            }
+
+            .user-text {
+                color: rgba(255,255,255,.9);
+                display: flex;
+                align-items: center;
+                padding: 8px 10px;
+            }
+
+            .btn-logout {
+                color: white !important;
+                text-decoration: none;
+                background: transparent;
+                border: none;
+                padding: 9px 12px;
+            }
+
+                .btn-logout:hover {
+                    background: rgba(255,255,255,.12);
+                    border-radius: 8px;
+                }
+
+            .admin-panel {
+                background: white;
+                border-radius: 16px;
+                border: 1px solid #edf0f2;
+                box-shadow: 0 5px 20px rgba(0,0,0,.04);
+                overflow: hidden;
+            }
+
+            .panel-header {
+                padding: 18px 22px;
+                border-bottom: 1px solid #edf0f2;
+            }
+
+                .panel-header h4 {
+                    margin: 0;
+                    font-weight: 700;
+                }
+
+            .admin-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 20px;
+            }
+
+                .admin-header h1 {
+                    font-weight: 700;
+                    margin-bottom: 5px;
+                }
+
+                .admin-header p {
+                    color: #6b7280;
+                    margin-bottom: 0;
+                }
+
+            .detail-label {
+                color: #6b7280;
+                font-size: .9rem;
+                font-weight: 600;
+            }
+
+            .detail-value {
+                font-size: 1.05rem;
+                font-weight: 600;
+            }
+
+            @@media(max-width: 991px) {
+
+                .admin-header {
+                    align-items: flex-start;
+                    flex-direction: column;
+                }
+
+                .vet-navbar .nav-link {
+                    margin-top: 3px;
+                }
+            }
+
+    </style>
+
 </head>
- 
- 
+
+
 <body>
- 
-<header>
- 
+
+    <!-- ======================================================
+         NAVBAR
+         ====================================================== -->
+
     <nav class="navbar navbar-expand-lg navbar-dark vet-navbar">
- 
+
         <div class="container-fluid px-lg-5">
- 
+
+
+            <!-- LOGO -->
+
             <a class="navbar-brand vet-brand"
                asp-controller="Home"
                asp-action="Index">
- 
-                <span class="brand-icon">
+
+                <span class="vet-logo">
                     🐾
                 </span>
- 
+
                 VetCare
- 
+
             </a>
- 
- 
+
+
+            <!-- BOTÓN RESPONSIVE -->
+
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#navbarVet">
- 
+                    data-bs-target="#navbarVetCare"
+                    aria-controls="navbarVetCare"
+                    aria-expanded="false"
+                    aria-label="Menú">
+
                 <span class="navbar-toggler-icon"></span>
- 
+
             </button>
- 
- 
+
+
             <div class="collapse navbar-collapse"
-                 id="navbarVet">
- 
- 
+                 id="navbarVetCare">
+
+
+                <!-- ==================================================
+                     MENÚ IZQUIERDO
+                     ================================================== -->
+
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
- 
- 
+
+
+                    <!-- ==============================================
+                         ADMINISTRADOR
+                         ============================================== -->
                     @if (User.Identity != null &&
-                         User.Identity.IsAuthenticated)
+                                             User.Identity.IsAuthenticated &&
+                                             User.IsInRole("Administrador"))
                     {
- 
-                        @if (User.IsInRole("Administrador"))
-                        {
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="Dashboard"
-                                   asp-action="Index">
- 
-                                    Dashboard
- 
-                                </a>
- 
-                            </li>
- 
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="ServiciosVeterinarios"
-                                   asp-action="Index">
- 
-                                    Servicios
- 
-                                </a>
- 
-                            </li>
- 
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="AdminCitas"
-                                   asp-action="Index">
- 
-                                    Citas
- 
-                                </a>
- 
-                            </li>
- 
- 
-                            <li class="nav-item dropdown">
- 
-                                <a class="nav-link dropdown-toggle"
-                                   href="#"
-                                   data-bs-toggle="dropdown">
- 
-                                    Reportes
- 
-                                </a>
- 
- 
-                                <ul class="dropdown-menu">
- 
-                                    <li>
- 
-                                        <a class="dropdown-item"
-                                           asp-controller="Reportes"
-                                           asp-action="CitasGenerales">
- 
-                                            Listado general de citas
- 
-                                        </a>
- 
-                                    </li>
- 
- 
-                                    <li>
- 
-                                        <a class="dropdown-item"
-                                           asp-controller="Reportes"
-                                           asp-action="ServiciosSolicitados">
- 
-                                            Servicios más solicitados
- 
-                                        </a>
- 
-                                    </li>
- 
-                                </ul>
- 
-                            </li>
- 
-                        }
- 
- 
-                        @if (User.IsInRole("Cliente"))
-                        {
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="ServiciosVeterinarios"
-                                   asp-action="Index">
- 
-                                    Servicios
- 
-                                </a>
- 
-                            </li>
- 
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="Mascotas"
-                                   asp-action="Index">
- 
-                                    Mis Mascotas
- 
-                                </a>
- 
-                            </li>
- 
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="Citas"
-                                   asp-action="Create">
- 
-                                    Solicitar Cita
- 
-                                </a>
- 
-                            </li>
- 
- 
-                            <li class="nav-item">
- 
-                                <a class="nav-link"
-                                   asp-controller="Citas"
-                                   asp-action="Index">
- 
-                                    Mis Citas
- 
-                                </a>
- 
-                            </li>
- 
-                        }
- 
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Dashboard"
+                               asp-action="Index">
+
+                                Dashboard
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="ServiciosVeterinarios"
+                               asp-action="Index">
+
+                                Servicios
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="AdminCitas"
+                               asp-action="Index">
+
+                                Citas
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- REPORTES -->
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+
+                                Reportes
+
+                            </a>
+
+
+                            <ul class="dropdown-menu">
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="Reportes"
+                                       asp-action="CitasGenerales">
+
+                                        📅 Listado general de citas
+
+                                    </a>
+
+                                </li>
+
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="Reportes"
+                                       asp-action="ServiciosMasSolicitados">
+
+                                        📊 Servicios más solicitados
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
                     }
- 
+
+
+                    <!-- ==============================================
+                         CLIENTE
+                         ============================================== -->
+                    @if (User.Identity != null &&
+                                             User.Identity.IsAuthenticated &&
+                                             User.IsInRole("Cliente"))
+                    {
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="ServiciosVeterinarios"
+                               asp-action="Index">
+
+                                Servicios
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Mascotas"
+                               asp-action="Index">
+
+                                Mis Mascotas
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Citas"
+                               asp-action="Create">
+
+                                Solicitar Cita
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Citas"
+                               asp-action="Index">
+
+                                Mis Citas
+
+                            </a>
+
+                        </li>
+                    }
+
                 </ul>
- 
- 
-                <partial name="_LoginPartial" />
- 
+
+
+                <!-- ==================================================
+                     MENÚ DERECHO
+                     ================================================== -->
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+
+                        var usuarioActual =
+                            await UserManager.GetUserAsync(User);
+
+
+                        <li class="nav-item">
+
+                            <span class="user-text">
+
+                                Hola
+                                @(usuarioActual?.NombreCompleto
+                                    ?? User.Identity?.Name)
+
+                            </span>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <form class="form-inline"
+                                  asp-area="Identity"
+                                  asp-page="/Account/Logout"
+                                  asp-route-returnUrl="@Url.Action(
+                                                                      "Index",
+                                                                      "Home",
+                                                                      new { area = "" })">
+
+                                <button type="submit"
+                                        class="btn-logout">
+
+                                    Cerrar sesión
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+                    }
+                    else
+                    {
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-area="Identity"
+                               asp-page="/Account/Register">
+
+                                Registrarse
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-area="Identity"
+                               asp-page="/Account/Login">
+
+                                Iniciar sesión
+
+                            </a>
+
+                        </li>
+
+                    }
+
+                </ul>
+
             </div>
- 
+
         </div>
- 
+
     </nav>
- 
-</header>
- 
- 
-<main class="main-content">
- 
-    <div class="container-fluid px-lg-5 py-4">
- 
-        @RenderBody()
- 
-    </div>
- 
-</main>
- 
- 
-<footer class="vet-footer">
- 
-    <div class="container-fluid px-lg-5">
- 
-        © 2026 VetCare - Clínica Veterinaria
- 
-    </div>
- 
-</footer>
- 
- 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
- 
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
- 
-<script src="~/js/site.js"
-        asp-append-version="true"></script>
- 
-@await RenderSectionAsync(
-    "Scripts",
-    required: false
-)
- 
+
+
+
+    <!-- ======================================================
+         CONTENIDO
+         ====================================================== -->
+
+    <main class="main-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            @RenderBody()
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ======================================================
+         FOOTER
+         ====================================================== -->
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                justify-content-between
+                align-items-center
+                flex-wrap">
+
+                <span>
+
+                    © 2026 VetCare - Clínica Veterinaria
+
+                </span>
+
+
+                <span>
+
+                    Cuidado y bienestar para tus mascotas 🐾
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- ======================================================
+         SCRIPTS
+         ====================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false
+    )
+
 </body>
- 
+
 </html>
- 

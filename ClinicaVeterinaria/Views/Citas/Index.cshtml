@@ -1,0 +1,273 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.Cita>
+
+@{
+    ViewData["Title"] = "Mis Citas";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                📅 Mis Citas
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulta las citas veterinarias de tus mascotas.
+            </p>
+
+        </div>
+
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            + Solicitar Cita
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            @TempData["Mensaje"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div style="font-size:70px;">
+                    📅
+                </div>
+
+                <h4 class="fw-bold mt-3">
+                    No tienes citas registradas
+                </h4>
+
+                <p class="text-muted">
+                    Solicita una cita para una de tus mascotas.
+                </p>
+
+                <a asp-action="Create"
+                   class="btn btn-primary">
+
+                    Solicitar mi primera cita
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Mascota
+                                </th>
+
+                                <th>
+                                    Servicio
+                                </th>
+
+                                <th>
+                                    Fecha
+                                </th>
+
+                                <th>
+                                    Estado
+                                </th>
+
+                                <th>
+                                    Acciones
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var cita in Model)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+                                            🐾 @cita.Mascota?.Nombre
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @cita.ServicioVeterinario?.Nombre
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @cita.Fecha.ToString(
+                                            "dd/MM/yyyy HH:mm"
+                                        )
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (cita.Estado == "Pendiente")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+
+                                                Pendiente
+
+                                            </span>
+                                        }
+                                        else if (cita.Estado == "Confirmada")
+                                        {
+                                            <span class="badge bg-primary">
+
+                                                Confirmada
+
+                                            </span>
+                                        }
+                                        else if (cita.Estado == "Atendida")
+                                        {
+                                            <span class="badge bg-success">
+
+                                                Atendida
+
+                                            </span>
+                                        }
+                                        else if (cita.Estado == "Cancelada")
+                                        {
+                                            <span class="badge bg-danger">
+
+                                                Cancelada
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+
+                                                @cita.Estado
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="d-flex gap-2 flex-wrap">
+
+
+                                            <!-- VER DETALLE -->
+
+                                            <a asp-action="Details"
+                                               asp-route-id="@cita.Id"
+                                               class="btn btn-sm btn-outline-primary">
+
+                                                Ver detalle
+
+                                            </a>
+
+
+                                            <!-- CANCELAR -->
+                                            @if (cita.Estado != "Cancelada" &&
+                                                                                             cita.Estado != "Atendida")
+                                            {
+                                                <form asp-controller="Citas"
+                                                      asp-action="Cancelar"
+                                                      asp-route-id="@cita.Id"
+                                                      method="post"
+                                                      onsubmit="return confirm('¿Estás seguro de que deseas cancelar esta cita?');">
+
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger">
+
+                                                        Cancelar cita
+
+                                                    </button>
+
+                                                </form>
+                                            }
+
+
+                                            @if (cita.Estado == "Cancelada")
+                                            {
+                                                <span class="text-muted small align-self-center">
+
+                                                    Cita cancelada
+
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

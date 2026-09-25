@@ -1,5 +1,6 @@
 ﻿namespace ClinicaVeterinaria.Models
 {
+
     public class DashboardViewModel
     {
         public int TotalServicios { get; set; }
@@ -16,4 +17,5 @@
 
         public List<Cita> UltimasCitas { get; set; } = new();
     }
+
 }

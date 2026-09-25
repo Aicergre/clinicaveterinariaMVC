@@ -1,0 +1,188 @@
+﻿@model ClinicaVeterinaria.Models.CitaCreateViewModel
+
+@{
+    ViewData["Title"] = "Solicitar Cita";
+}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="text-center mb-4">
+
+                        <div style="font-size:55px;">
+                            📅
+                        </div>
+
+                        <h2 class="fw-bold">
+                            Solicitar Cita
+                        </h2>
+
+                        <p class="text-muted">
+                            Agenda una atención veterinaria para tu mascota.
+                        </p>
+
+                    </div>
+
+
+                    <form asp-controller="Citas"
+                          asp-action="Create"
+                          method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label asp-for="MascotaId"
+                                   class="form-label fw-semibold">
+
+                                🐾 Mascota
+
+                            </label>
+
+                            <select asp-for="MascotaId"
+                                    asp-items="ViewBag.Mascotas"
+                                    class="form-select">
+
+                                <option value="0">
+                                    Seleccione su mascota
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="MascotaId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label asp-for="ServicioVeterinarioId"
+                                   class="form-label fw-semibold">
+
+                                🩺 Servicio Veterinario
+
+                            </label>
+
+                            <select asp-for="ServicioVeterinarioId"
+                                    asp-items="ViewBag.Servicios"
+                                    class="form-select">
+
+                                <option value="0">
+                                    Seleccione un servicio
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="ServicioVeterinarioId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Fecha"
+                                       class="form-label fw-semibold">
+
+                                    📆 Fecha
+
+                                </label>
+
+                                <input asp-for="Fecha"
+                                       type="date"
+                                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       class="form-control" />
+
+                                <span asp-validation-for="Fecha"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Hora"
+                                       class="form-label fw-semibold">
+
+                                    🕐 Hora
+
+                                </label>
+
+                                <input asp-for="Hora"
+                                       type="time"
+                                       min="08:00"
+                                       max="18:00"
+                                       step="1800"
+                                       class="form-control" />
+
+                                <span asp-validation-for="Hora"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="alert alert-info">
+
+                            <strong>
+                                Horario de atención:
+                            </strong>
+
+                            08:00 a 18:00
+
+                        </div>
+
+
+                        <div class="d-grid gap-2 mt-4">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                📅 Solicitar Cita
+
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+
+                                Cancelar
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

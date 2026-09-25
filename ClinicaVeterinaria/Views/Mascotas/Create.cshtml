@@ -1,0 +1,145 @@
+﻿@model ClinicaVeterinaria.Models.Mascota
+
+@{
+    ViewData["Title"] = "Registrar Mascota";
+}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7 col-lg-6">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <div style="font-size:60px;">
+                            🐾
+                        </div>
+
+                        <h2 class="fw-bold">
+                            Registrar Mascota
+                        </h2>
+
+                        <p class="text-muted">
+                            Ingresa los datos de tu mascota.
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Create"
+                          method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Nombre"
+                                   class="form-label">
+                                Nombre
+                            </label>
+
+                            <input asp-for="Nombre"
+                                   class="form-control"
+                                   placeholder="Ej: Luna" />
+
+                            <span asp-validation-for="Nombre"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Especie"
+                                   class="form-label">
+                                Especie
+                            </label>
+
+                            <select asp-for="Especie"
+                                    class="form-select">
+
+                                <option value="">
+                                    Seleccione una especie
+                                </option>
+
+                                <option value="Perro">
+                                    Perro
+                                </option>
+
+                                <option value="Gato">
+                                    Gato
+                                </option>
+
+                                <option value="Conejo">
+                                    Conejo
+                                </option>
+
+                                <option value="Ave">
+                                    Ave
+                                </option>
+
+                                <option value="Otro">
+                                    Otro
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="Especie"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Raza"
+                                   class="form-label">
+                                Raza
+                            </label>
+
+                            <input asp-for="Raza"
+                                   class="form-control"
+                                   placeholder="Ej: Labrador" />
+
+                            <span asp-validation-for="Raza"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Guardar Mascota
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+                                Cancelar
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

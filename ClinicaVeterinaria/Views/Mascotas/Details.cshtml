@@ -1,0 +1,58 @@
+﻿@model ClinicaVeterinaria.Models.Mascota
+
+@{
+    ViewData["Title"] = "Detalle de Mascota";
+}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-5 text-center">
+
+                    <div style="font-size:80px;">
+                        🐾
+                    </div>
+
+                    <h2 class="fw-bold mt-3">
+                        @Model.Nombre
+                    </h2>
+
+                    <div class="row mt-4">
+
+                        <div class="col-md-6">
+                            <strong>Especie</strong>
+                            <p>@Model.Especie</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Raza</strong>
+                            <p>@Model.Raza</p>
+                        </div>
+
+                    </div>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+                        Volver
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-primary">
+                        Editar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

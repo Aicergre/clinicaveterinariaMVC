@@ -6,4 +6,5 @@ namespace ClinicaVeterinaria.Models
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
+
 }
